@@ -1,4 +1,4 @@
-module github.com/longvhv/saas-shared-go
+module github.com/vhvcorp/go-shared
 
 go 1.24.0
 
