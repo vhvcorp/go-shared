@@ -2,14 +2,14 @@
 
 This document demonstrates how to use the new shared packages in your microservices.
 
-## HTTP Client Package (`pkg/httpclient`)
+## HTTP Client Package (`httpclient`)
 
 The HTTP client package provides a standardized HTTP client with retry logic and circuit breaker support.
 
 ### Basic Usage
 
 ```go
-import "github.com/vhvplatform/go-framework-go/pkg/httpclient"
+import "github.com/vhvplatform/go-shared/httpclient"
 
 // Create a simple client
 client := httpclient.NewClient(
@@ -42,7 +42,7 @@ client := httpclient.NewClient(
 )
 ```
 
-## Middleware Package (`pkg/middleware`)
+## Middleware Package (`middleware`)
 
 The middleware package provides common middleware for Gin applications.
 
@@ -51,7 +51,7 @@ The middleware package provides common middleware for Gin applications.
 ```go
 import (
     "github.com/gin-gonic/gin"
-    "github.com/vhvplatform/go-framework-go/pkg/middleware"
+    "github.com/vhvplatform/go-shared/middleware"
 )
 
 r := gin.Default()
@@ -136,7 +136,7 @@ api.Use(middleware.RequireJSON())
 r.Use(middleware.RequestSizeLimit(10 * 1024 * 1024))
 ```
 
-## Response Package (`pkg/response`)
+## Response Package (`response`)
 
 The response package provides standardized API response formats.
 
@@ -144,7 +144,7 @@ The response package provides standardized API response formats.
 
 ```go
 import (
-    "github.com/vhvplatform/go-framework-go/pkg/response"
+    "github.com/vhvplatform/go-shared/response"
 )
 
 func GetUser(c *gin.Context) {
@@ -188,7 +188,7 @@ func HandleCustomError(c *gin.Context) {
 }
 ```
 
-## Context Package (`pkg/context`)
+## Context Package (`context`)
 
 The context package provides helpers for managing user context in Gin applications.
 
@@ -196,7 +196,7 @@ The context package provides helpers for managing user context in Gin applicatio
 
 ```go
 import (
-    "github.com/vhvplatform/go-framework-go/pkg/context"
+    "github.com/vhvplatform/go-shared/context"
 )
 
 func SomeHandler(c *gin.Context) {
@@ -259,11 +259,11 @@ import (
     "time"
 
     "github.com/gin-gonic/gin"
-    "github.com/vhvplatform/go-framework-go/pkg/httpclient"
-    "github.com/vhvplatform/go-framework-go/pkg/middleware"
-    "github.com/vhvplatform/go-framework-go/pkg/response"
-    pkgctx "github.com/vhvplatform/go-framework-go/pkg/context"
-    "github.com/vhvplatform/go-framework-go/pkg/logger"
+    "github.com/vhvplatform/go-shared/httpclient"
+    "github.com/vhvplatform/go-shared/middleware"
+    "github.com/vhvplatform/go-shared/response"
+    pkgctx "github.com/vhvplatform/go-shared/context"
+    "github.com/vhvplatform/go-shared/logger"
 )
 
 func main() {
