@@ -1,4 +1,5 @@
 //go:build ignore
+
 package main
 
 import (
@@ -7,7 +8,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/vhvcorp/go-shared/redis"
+	"github.com/vhvplatform/go-shared/redis"
 )
 
 // Simulated database functions
@@ -63,7 +64,7 @@ func main() {
 
 	// Example 1: Basic Remember Pattern
 	fmt.Println("=== Example 1: Basic Remember Pattern ===")
-	
+
 	userID := "123"
 	key := fmt.Sprintf("user:%s", userID)
 
@@ -89,7 +90,7 @@ func main() {
 
 	// Example 2: RememberForever for Configuration
 	fmt.Println("=== Example 2: RememberForever for Config ===")
-	
+
 	// First call: Loads from database
 	fmt.Println("First call (cache miss):")
 	config, err := cache.RememberForever(ctx, "app:config", func() (interface{}, error) {
@@ -112,7 +113,7 @@ func main() {
 
 	// Example 3: Remember with Computation
 	fmt.Println("=== Example 3: Remember with Expensive Computation ===")
-	
+
 	input := 42
 	computeKey := fmt.Sprintf("compute:%d", input)
 
@@ -140,7 +141,7 @@ func main() {
 
 	// Example 4: Remember with Error Handling
 	fmt.Println("=== Example 4: Error Handling ===")
-	
+
 	result, err = cache.Remember(ctx, "error:key", 5*time.Minute, func() (interface{}, error) {
 		return nil, fmt.Errorf("simulated error")
 	})
@@ -150,24 +151,24 @@ func main() {
 
 	// Example 5: Real-world GetUser Function
 	fmt.Println("=== Example 5: Real-World GetUser Function ===")
-	
+
 	GetUser := func(ctx context.Context, cache *redis.Cache, userID string) (map[string]string, error) {
 		key := fmt.Sprintf("user:%s", userID)
-		
+
 		result, err := cache.Remember(ctx, key, 5*time.Minute, func() (interface{}, error) {
 			return fetchUserFromDB(userID)
 		})
-		
+
 		if err != nil {
 			return nil, err
 		}
-		
+
 		// Safe type assertion
 		user, ok := result.(map[string]string)
 		if !ok {
 			return nil, fmt.Errorf("unexpected type from cache: %T", result)
 		}
-		
+
 		return user, nil
 	}
 
@@ -184,23 +185,23 @@ func main() {
 
 	// Example 6: Cache Invalidation
 	fmt.Println("=== Example 6: Cache Invalidation ===")
-	
+
 	invalidateKey := "invalidate:test"
-	
+
 	// Set cached value
 	cache.Remember(ctx, invalidateKey, 5*time.Minute, func() (interface{}, error) {
 		return "original value", nil
 	})
-	
+
 	// Retrieve cached value
 	result, _ = cache.Remember(ctx, invalidateKey, 5*time.Minute, func() (interface{}, error) {
 		return "new value", nil
 	})
 	fmt.Printf("Before invalidation: %v\n", result)
-	
+
 	// Invalidate cache
 	cache.Delete(ctx, invalidateKey)
-	
+
 	// Value is recomputed
 	result, _ = cache.Remember(ctx, invalidateKey, 5*time.Minute, func() (interface{}, error) {
 		return "new value", nil

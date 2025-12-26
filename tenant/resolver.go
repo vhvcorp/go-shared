@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	pkgctx "github.com/vhvcorp/go-shared/context"
+	pkgctx "github.com/vhvplatform/go-shared/context"
 )
 
 var (

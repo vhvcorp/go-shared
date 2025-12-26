@@ -204,16 +204,16 @@ Mỗi thư viện mới đều có tài liệu đầy đủ bằng tiếng Việ
 
 ### Cài Đặt
 ```bash
-go get github.com/vhvcorp/go-shared@latest
+go get github.com/vhvplatform/go-shared@latest
 ```
 
 ### Import
 ```go
 import (
-    "github.com/vhvcorp/go-shared/email"
-    "github.com/vhvcorp/go-shared/sms"
-    "github.com/vhvcorp/go-shared/storage"
-    "github.com/vhvcorp/go-shared/metrics"
+    "github.com/vhvplatform/go-shared/email"
+    "github.com/vhvplatform/go-shared/sms"
+    "github.com/vhvplatform/go-shared/storage"
+    "github.com/vhvplatform/go-shared/metrics"
 )
 ```
 
@@ -276,7 +276,7 @@ go tool cover -html=coverage.out
 ## 👥 Contributors
 
 - Copilot AI Agent
-- vhvcorp team
+- vhvplatform team
 
 ## 📝 Changelog
 

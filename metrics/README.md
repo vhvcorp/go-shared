@@ -15,7 +15,7 @@ Package `metrics` cung cấp utilities để thu thập và expose application m
 
 ```go
 import (
-    "github.com/vhvcorp/go-shared/metrics"
+    "github.com/vhvplatform/go-shared/metrics"
     "github.com/prometheus/client_golang/prometheus/promhttp"
 )
 

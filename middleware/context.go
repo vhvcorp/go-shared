@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 
-	pkgctx "github.com/vhvcorp/go-shared/context"
+	pkgctx "github.com/vhvplatform/go-shared/context"
 )
 
 // ContextMiddleware enriches request with context information

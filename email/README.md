@@ -21,7 +21,7 @@ Package `email` cung cấp abstraction layer để gửi email với hỗ trợ 
 ## Sử Dụng Cơ Bản
 
 ```go
-import "github.com/vhvcorp/go-shared/email"
+import "github.com/vhvplatform/go-shared/email"
 
 // Tạo client với SMTP
 client, err := email.NewClient(email.Config{

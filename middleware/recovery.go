@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/vhvcorp/go-shared/logger"
-	"github.com/vhvcorp/go-shared/response"
+	"github.com/vhvplatform/go-shared/logger"
+	"github.com/vhvplatform/go-shared/response"
 	"go.uber.org/zap"
 )
 

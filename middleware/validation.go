@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/vhvcorp/go-shared/response"
+	"github.com/vhvplatform/go-shared/response"
 )
 
 // RequestSizeLimit limits the size of incoming requests

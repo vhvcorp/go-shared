@@ -4,9 +4,9 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	pkgctx "github.com/vhvcorp/go-shared/context"
-	"github.com/vhvcorp/go-shared/jwt"
-	"github.com/vhvcorp/go-shared/response"
+	pkgctx "github.com/vhvplatform/go-shared/context"
+	"github.com/vhvplatform/go-shared/jwt"
+	"github.com/vhvplatform/go-shared/response"
 )
 
 // Auth validates JWT tokens and sets user context
@@ -90,7 +90,7 @@ func RequireRoles(roles ...string) gin.HandlerFunc {
 func RequireAllRoles(roles ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userRoles := pkgctx.GetRolesFromGin(c)
-		
+
 		for _, required := range roles {
 			hasRole := false
 			for _, userRole := range userRoles {
@@ -105,7 +105,7 @@ func RequireAllRoles(roles ...string) gin.HandlerFunc {
 				return
 			}
 		}
-		
+
 		c.Next()
 	}
 }

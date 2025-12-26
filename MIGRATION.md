@@ -11,7 +11,7 @@ This document outlines the complete strategy for migrating the SaaS Framework fr
 - [Phase 1: Shared Library (CURRENT)](#phase-1-shared-library-current)
 - [Phase 2: Service Repositories](#phase-2-service-repositories)
 - [Phase 3: Infrastructure Repository](#phase-3-infrastructure-repository)
-- [Phase 4: DevTools Repository](#phase-4-devtools-repository)
+- [Phase 4: DevTools Repository](#phase-4-framework-repository)
 - [Phase 5: CI/CD Updates](#phase-5-cicd-updates)
 - [Phase 6: Monorepo Sunset](#phase-6-monorepo-sunset)
 - [Migration Timeline](#migration-timeline)
@@ -44,7 +44,7 @@ We will use a **phased approach** to minimize disruption:
 1. Create shared library (keeps monorepo working)
 2. Create service repositories (parallel development possible)
 3. Create infrastructure repository
-4. Create devtools repository
+4. Create framework repository
 5. Update CI/CD pipelines
 6. Archive monorepo
 
@@ -80,7 +80,7 @@ saas-framework-go/
 ```
 
 ### Current Dependencies
-- All services depend on `github.com/longvhv/saas-framework-go/pkg`
+- All services depend on `github.com/vhvplatform/go-framework-go/pkg`
 - Services can import from each other (tight coupling)
 - Shared infrastructure configuration
 
@@ -131,24 +131,24 @@ saas-framework-go/
 └─────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────┐
-│                      saas-devtools                           │
+│                      go-framework                           │
 │  (Development tools, scripts, docker-compose)                │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ### Repository Mapping
 
-| Repository | Contents | Owner |
-|-----------|----------|-------|
-| `go-shared` | Shared Go libraries | Platform Team |
-| `saas-api-gateway` | API Gateway service | Gateway Team |
-| `saas-auth-service` | Authentication service | Auth Team |
-| `saas-user-service` | User management service | User Team |
-| `saas-tenant-service` | Tenant management service | Tenant Team |
-| `saas-notification-service` | Notification service | Notification Team |
-| `saas-system-config-service` | System configuration service | Config Team |
-| `saas-infrastructure` | Kubernetes, Helm, Terraform | DevOps Team |
-| `saas-devtools` | Development tools and scripts | Platform Team |
+| Repository                 | Contents | Owner |
+|----------------------------|----------|-------|
+| `go-shared`                | Shared Go libraries | Platform Team |
+| `go-api-gateway`           | API Gateway service | Gateway Team |
+| `go-auth-service`          | Authentication service | Auth Team |
+| `go-user-service`          | User management service | User Team |
+| `go-tenant-service`        | Tenant management service | Tenant Team |
+| `go-notification-service`  | Notification service | Notification Team |
+| `go-system-config-service` | System configuration service | Config Team |
+| `go-infrastructure`        | Kubernetes, Helm, Terraform | DevOps Team |
+| `go-framework`             | Development tools and scripts | Platform Team |
 
 ## Phase 1: Shared Library (CURRENT)
 
@@ -192,7 +192,7 @@ go-shared/
 ```
 
 #### 1.2 Update Module Path
-- Change module from `github.com/longvhv/saas-framework-go/pkg` to `github.com/vhvcorp/go-shared`
+- Change module from `github.com/vhvplatform/go-framework-go/pkg` to `github.com/vhvplatform/go-shared`
 - Update all internal imports within the shared library
 
 #### 1.3 Set Up CI/CD
@@ -216,7 +216,7 @@ git push origin v1.0.0
 - [x] LICENSE file
 
 ### Transition Period
-During this phase, the monorepo continues to work. Services still use `github.com/longvhv/saas-framework-go/pkg`.
+During this phase, the monorepo continues to work. Services still use `github.com/vhvplatform/go-framework-go/pkg`.
 
 ## Phase 2: Service Repositories
 
@@ -262,22 +262,22 @@ saas-auth-service/
 #### 2.2 Update Dependencies
 Change:
 ```go
-import "github.com/longvhv/saas-framework-go/pkg/auth"
+import "github.com/vhvplatform/go-framework-go/pkg/auth"
 ```
 
 To:
 ```go
-import "github.com/vhvcorp/go-shared/auth"
+import "github.com/vhvplatform/go-shared/auth"
 ```
 
 Update `go.mod`:
 ```go
-module github.com/longvhv/saas-auth-service
+module github.com/vhvplatform/go-auth-service
 
 go 1.21
 
 require (
-    github.com/vhvcorp/go-shared v1.0.0
+    github.com/vhvplatform/go-shared v1.0.0
     // other dependencies
 )
 ```
@@ -420,7 +420,7 @@ saas-infrastructure/
 
 ### Repository Structure
 ```bash
-saas-devtools/
+go-framework/
 ├── README.md
 ├── docker-compose.yml
 ├── docker-compose.dev.yml
@@ -525,15 +525,15 @@ This repository has been archived and split into multiple repositories.
 
 ## New Repositories
 
-- Shared Library: https://github.com/vhvcorp/go-shared
-- API Gateway: https://github.com/longvhv/saas-api-gateway
-- Auth Service: https://github.com/longvhv/saas-auth-service
-- User Service: https://github.com/longvhv/saas-user-service
-- Tenant Service: https://github.com/longvhv/saas-tenant-service
-- Notification Service: https://github.com/longvhv/saas-notification-service
-- System Config Service: https://github.com/longvhv/saas-system-config-service
-- Infrastructure: https://github.com/longvhv/saas-infrastructure
-- DevTools: https://github.com/longvhv/saas-devtools
+- Shared Library: https://github.com/vhvplatform/go-shared
+- API Gateway: https://github.com/vhvplatform/go-api-gateway
+- Auth Service: https://github.com/vhvplatform/go-auth-service
+- User Service: https://github.com/vhvplatform/go-user-service
+- Tenant Service: https://github.com/vhvplatform/go-tenant-service
+- Notification Service: https://github.com/vhvplatform/go-notification-service
+- System Config Service: https://github.com/vhvplatform/go-system-config-service
+- Infrastructure: https://github.com/vhvplatform/go-infrastructure
+- DevTools: https://github.com/vhvplatform/go-framework
 
 For historical reference only. Do not use this repository for new development.
 EOF
@@ -609,7 +609,7 @@ A: Yes. Each phase is independent. We can migrate services gradually.
 **Q: How do we update shared library?**
 A: Update version in service's `go.mod`:
 ```bash
-go get github.com/vhvcorp/go-shared@v1.1.0
+go get github.com/vhvplatform/go-shared@v1.1.0
 ```
 
 **Q: What about breaking changes in shared library?**
@@ -622,7 +622,7 @@ A: Services communicate via REST APIs (as before). The change is organizational,
 A: Shared configs move to `saas-infrastructure` repository. Services reference them via ConfigMaps/Secrets.
 
 **Q: How do we test across services locally?**
-A: Use `saas-devtools` repository with Docker Compose that references all services.
+A: Use `go-framework` repository with Docker Compose that references all services.
 
 ### Workflow Questions
 
@@ -656,7 +656,7 @@ A: Yes, git history will be preserved in new repositories using `git filter-bran
 
 ### Resources
 - Main documentation: This file
-- Shared library docs: https://github.com/vhvcorp/go-shared
+- Shared library docs: https://github.com/vhvplatform/go-shared
 - Slack channel: #multi-repo-migration
 - Weekly sync meetings: Thursdays 2pm
 

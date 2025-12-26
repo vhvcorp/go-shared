@@ -1,4 +1,4 @@
-module github.com/vhvcorp/go-shared
+module github.com/vhvplatform/go-shared
 
 go 1.24.0
 

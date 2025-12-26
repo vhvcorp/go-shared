@@ -9,7 +9,7 @@ The HTTP client package provides a standardized HTTP client with retry logic and
 ### Basic Usage
 
 ```go
-import "github.com/longvhv/saas-framework-go/pkg/httpclient"
+import "github.com/vhvplatform/go-framework-go/pkg/httpclient"
 
 // Create a simple client
 client := httpclient.NewClient(
@@ -51,7 +51,7 @@ The middleware package provides common middleware for Gin applications.
 ```go
 import (
     "github.com/gin-gonic/gin"
-    "github.com/longvhv/saas-framework-go/pkg/middleware"
+    "github.com/vhvplatform/go-framework-go/pkg/middleware"
 )
 
 r := gin.Default()
@@ -144,7 +144,7 @@ The response package provides standardized API response formats.
 
 ```go
 import (
-    "github.com/longvhv/saas-framework-go/pkg/response"
+    "github.com/vhvplatform/go-framework-go/pkg/response"
 )
 
 func GetUser(c *gin.Context) {
@@ -196,7 +196,7 @@ The context package provides helpers for managing user context in Gin applicatio
 
 ```go
 import (
-    "github.com/longvhv/saas-framework-go/pkg/context"
+    "github.com/vhvplatform/go-framework-go/pkg/context"
 )
 
 func SomeHandler(c *gin.Context) {
@@ -259,11 +259,11 @@ import (
     "time"
 
     "github.com/gin-gonic/gin"
-    "github.com/longvhv/saas-framework-go/pkg/httpclient"
-    "github.com/longvhv/saas-framework-go/pkg/middleware"
-    "github.com/longvhv/saas-framework-go/pkg/response"
-    pkgctx "github.com/longvhv/saas-framework-go/pkg/context"
-    "github.com/longvhv/saas-framework-go/pkg/logger"
+    "github.com/vhvplatform/go-framework-go/pkg/httpclient"
+    "github.com/vhvplatform/go-framework-go/pkg/middleware"
+    "github.com/vhvplatform/go-framework-go/pkg/response"
+    pkgctx "github.com/vhvplatform/go-framework-go/pkg/context"
+    "github.com/vhvplatform/go-framework-go/pkg/logger"
 )
 
 func main() {

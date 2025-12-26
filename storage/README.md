@@ -23,7 +23,7 @@ Package `storage` cung cấp abstraction layer cho object storage với hỗ tr�
 ## Sử Dụng Cơ Bản
 
 ```go
-import "github.com/vhvcorp/go-shared/storage"
+import "github.com/vhvplatform/go-shared/storage"
 
 // Tạo client với S3
 client, err := storage.NewClient(storage.Config{

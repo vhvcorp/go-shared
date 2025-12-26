@@ -22,7 +22,7 @@ Comprehensive validation package for the SaaS Framework using [go-playground/val
 ## Installation
 
 ```go
-import "github.com/vhvcorp/go-shared/validation"
+import "github.com/vhvplatform/go-shared/validation"
 ```
 
 ## Quick Start

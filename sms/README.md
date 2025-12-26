@@ -21,7 +21,7 @@ Package `sms` cung cấp abstraction layer để gửi SMS với hỗ trợ nhi�
 ## Sử Dụng Cơ Bản
 
 ```go
-import "github.com/vhvcorp/go-shared/sms"
+import "github.com/vhvplatform/go-shared/sms"
 
 // Tạo client với Twilio
 client, err := sms.NewClient(sms.Config{

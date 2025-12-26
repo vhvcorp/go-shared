@@ -1,4 +1,5 @@
 //go:build ignore
+
 package main
 
 import (
@@ -7,7 +8,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/vhvcorp/go-shared/redis"
+	"github.com/vhvplatform/go-shared/redis"
 )
 
 func main() {
@@ -73,7 +74,7 @@ func main() {
 
 	// Example 3: Multi-operations
 	fmt.Println("=== Example 3: Batch Operations ===")
-	
+
 	// Batch set
 	items := map[string]interface{}{
 		"product:1": "Laptop",
@@ -97,7 +98,7 @@ func main() {
 
 	// Example 4: Counter operations
 	fmt.Println("=== Example 4: Counter Operations ===")
-	
+
 	// Increment page views
 	views, err := cache.Increment(ctx, "page:views")
 	if err != nil {
@@ -121,7 +122,7 @@ func main() {
 
 	// Example 5: TTL management
 	fmt.Println("=== Example 5: TTL Management ===")
-	
+
 	err = cache.Set(ctx, "temp:data", "temporary", 10*time.Second)
 	if err != nil {
 		log.Printf("Set error: %v", err)
@@ -149,7 +150,7 @@ func main() {
 
 	// Example 6: Pattern-based operations
 	fmt.Println("=== Example 6: Pattern-Based Operations ===")
-	
+
 	// Set multiple keys with pattern
 	for i := 1; i <= 5; i++ {
 		key := fmt.Sprintf("session:%d", i)
@@ -172,7 +173,7 @@ func main() {
 
 	// Example 7: Namespaced caches
 	fmt.Println("=== Example 7: Namespaced Caches ===")
-	
+
 	userCache := cache.WithPrefix("users")
 	sessionCache := cache.WithPrefix("sessions")
 

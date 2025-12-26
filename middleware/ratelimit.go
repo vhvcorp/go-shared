@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/vhvcorp/go-shared/response"
+	"github.com/vhvplatform/go-shared/response"
 	"golang.org/x/time/rate"
 )
 
