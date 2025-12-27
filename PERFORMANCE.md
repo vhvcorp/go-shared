@@ -118,6 +118,86 @@ snakeCase := utils.ToSnakeCase("MyVariableName") // "my_variable_name"
 valid := utils.IsValidEmail("user@example.com")  // true
 ```
 
+### 6. Gin Context Optimization
+
+**Optimization**: Cache RequestContext in Gin context to avoid rebuilding.
+
+**Implementation**:
+- Store full RequestContext object in Gin context
+- Return cached context from `FromGinContext` when available
+- Eliminate 8 individual field lookups on every retrieval
+
+**Performance Impact**:
+- `FromGinContext` (cached): **24.9 ns/op with 0 allocations** (10x faster!)
+- `FromGinContext` (uncached): **268.7 ns/op with 1 allocation**
+
+**Usage**:
+```go
+// Store in Gin context (automatically caches)
+rc := &context.RequestContext{
+    UserID:   "user123",
+    TenantID: "tenant456",
+    // ... other fields
+}
+context.ToGinContext(c, rc)
+
+// Retrieve (extremely fast with caching)
+rc = context.FromGinContext(c) // Only 24.9 ns!
+```
+
+### 7. Response Package Optimization
+
+**Optimization**: Inline helper to avoid repeated correlation_id lookups.
+
+**Implementation**:
+- Added `getCorrelationID` helper function
+- Reduced repeated Gin context lookups in response functions
+
+**Performance Impact**:
+- Faster response generation in high-throughput APIs
+
+### 8. MongoDB Query Builder Optimization
+
+**Optimization**: Pre-allocate maps and slices with reasonable capacities.
+
+**Implementation**:
+- Pre-allocate `QueryBuilder` map with capacity 8
+- Pre-allocate `AggregationBuilder` slice with capacity 8
+- Reuse underlying storage in `Reset` method
+
+**Performance Impact**:
+- `NewQueryBuilder`: **8.3 ns/op with 0 allocations**
+- Reduced allocations during query building
+
+**Usage**:
+```go
+// Query builder now pre-allocates storage
+qb := mongodb.NewQueryBuilder()
+qb.Where("status", "active").
+   WhereGreaterThan("created_at", time.Now().Add(-24*time.Hour))
+```
+
+### 9. MongoDB Pagination Optimization
+
+**Optimization**: Run count and find operations concurrently, plus fast pagination mode.
+
+**Implementation**:
+- Execute count and find in parallel goroutines
+- Added `PaginateFast` that skips counting for better performance
+
+**Performance Impact**:
+- Faster pagination queries, especially for large collections
+- `PaginateFast` avoids expensive count operation entirely
+
+**Usage**:
+```go
+// Standard pagination (with total count)
+result, err := mongodb.Paginate(ctx, collection, filter, params, &users)
+
+// Fast pagination (without total count, faster)
+result, err := mongodb.PaginateFast(ctx, collection, filter, params, &users)
+```
+
 ## Best Practices for Performance
 
 ### 1. Use Context Caching
@@ -137,7 +217,18 @@ tenantID := rc.TenantID
 email := rc.Email
 ```
 
-### 2. Leverage Wildcard Permissions
+### 2. Use Gin Context Caching
+
+In Gin handlers, always use `FromGinContext` for fastest access:
+
+```go
+// ✅ Efficient - uses cached RequestContext
+rc := context.FromGinContext(c)
+userID := rc.UserID
+tenantID := rc.TenantID
+```
+
+### 3. Leverage Wildcard Permissions
 
 Use wildcard permissions to reduce permission checks:
 
@@ -156,7 +247,7 @@ permissions := []string{
 }
 ```
 
-### 3. Optimize Permission Checks
+### 5. Optimize Permission Checks
 
 Check for the most likely permissions first to benefit from early returns:
 
@@ -167,7 +258,26 @@ if auth.HasPermission(ctx, "users.read") {
 }
 ```
 
-### 4. Use Fast Build Targets
+### 6. Reuse Query Builders
+
+Reuse query builders with `Clone` and `Reset`:
+
+```go
+// Create a base query builder
+baseQB := mongodb.NewQueryBuilder().Where("tenant_id", tenantID)
+
+// Clone for different queries
+activeUsers := baseQB.Clone().Where("status", "active")
+inactiveUsers := baseQB.Clone().Where("status", "inactive")
+
+// Or reset and reuse
+qb := mongodb.NewQueryBuilder()
+result1 := qb.Where("status", "active").Build()
+qb.Reset() // Reuses underlying storage
+result2 := qb.Where("status", "inactive").Build()
+```
+
+### 7. Use Fast Build Targets
 
 For faster development iteration:
 

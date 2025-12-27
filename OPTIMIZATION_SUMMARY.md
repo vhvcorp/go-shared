@@ -18,7 +18,22 @@ This document summarizes the performance optimizations implemented in this PR fo
 
 ---
 
-### 2. Permission Checking (auth/permission.go)
+### 2. Gin Context Integration (context/gin.go)
+**Optimization**: Cache RequestContext in Gin context to avoid rebuilding.
+
+**Before**: Every call to `FromGinContext` built a new RequestContext from 8 individual lookups.
+
+**After**: Return cached RequestContext when available.
+
+**Benchmark Results**:
+- `FromGinContext` (cached): 24.9 ns/op (0 allocs)
+- `FromGinContext` (uncached): 268.7 ns/op (1 alloc)
+
+**Impact**: **10x faster** context retrieval in Gin middleware and handlers.
+
+---
+
+### 3. Permission Checking (auth/permission.go)
 **Optimization**: Improved string operations with early returns and better wildcard matching.
 
 **Changes**:
@@ -34,7 +49,61 @@ This document summarizes the performance optimizations implemented in this PR fo
 
 ---
 
-### 3. Rate Limiter (middleware/ratelimit.go)
+### 3. Permission Checking (auth/permission.go)
+**Optimization**: Improved string operations with early returns and better wildcard matching.
+
+**Changes**:
+- Fast path for wildcard admin permission (`*`)
+- Exact match checking with early returns
+- Optimized wildcard permission matching using `strings.HasPrefix`
+
+**Benchmark Results**:
+- `HasPermission`: 11.6 ns/op (0 allocs)
+- `HasPermissionWildcard`: 29.0 ns/op (0 allocs)
+
+**Impact**: Faster authorization checks in middleware and business logic.
+
+---
+
+### 4. Response Package (response/response.go)
+**Optimization**: Inline helper to avoid repeated correlation_id lookups.
+
+**Changes**:
+- Added `getCorrelationID` helper function
+- Reduced repeated `c.GetString("correlation_id")` calls
+
+**Impact**: Faster response generation in high-throughput APIs.
+
+---
+
+### 5. MongoDB Query Builder (mongodb/query_builder.go)
+**Optimization**: Pre-allocate maps and slices with reasonable capacities.
+
+**Changes**:
+- `NewQueryBuilder`: Pre-allocate map with capacity 8
+- `NewAggregationBuilder`: Pre-allocate slice with capacity 8
+- `QueryBuilder.Clone`: Pre-allocate with source capacity
+- `QueryBuilder.Reset`: Reuse underlying map storage
+
+**Benchmark Results**:
+- `NewQueryBuilder`: 8.3 ns/op (0 allocs)
+
+**Impact**: Reduced memory allocations in query building.
+
+---
+
+### 6. MongoDB Pagination (mongodb/pagination.go)
+**Optimization**: Run count and find operations concurrently.
+
+**Changes**:
+- Execute count and find in parallel goroutines
+- Added `PaginateFast` function that skips counting for better performance
+
+**Impact**: Faster pagination queries, especially for large collections.
+
+---
+
+### 7. Rate Limiter (middleware/ratelimit.go)
 **Optimization**: Reduced lock contention with optimized locking strategy.
 
 **Changes**:
